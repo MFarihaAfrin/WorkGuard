@@ -1,0 +1,120 @@
+{% extends 'accounts/dashboard_base.html' %}
+
+{% block title %}View Employee - WorkGuard{% endblock %}
+{% block has_sidebar %}{% endblock %}
+
+{% block toggle_btn %}
+<button onclick="toggleSidebar()" class="text-gray-700 hover:text-gray-900 text-xl"><i class="fa-solid fa-bars"></i></button>
+{% endblock %}
+
+{% block sidebar_nav %}
+<a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-house w-5"></i> Dashboard
+</a>
+<a href="{% url 'employees' %}" class="flex items-center gap-3 px-3 py-2 rounded-md bg-teal-800 font-medium">
+    <i class="fa-solid fa-users w-5"></i> Employees
+</a>
+<a href="{% url 'departments' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-building w-5"></i> Departments
+</a>
+{% endblock %}
+
+{% block main_class %}p-4 md:p-8{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto">
+    <div class="text-center mb-6">
+    <div class="w-14 h-14 bg-teal-100 text-teal-700 rounded-full flex items-center justify-center mx-auto mb-3 text-xl">
+        <i class="fa-solid fa-user"></i>
+    </div>
+    <h1 class="text-2xl font-bold text-gray-900">{{ record.employee_id }}</h1>
+    <p class="text-gray-500 text-sm">{{ record.get_role_display }}</p>
+</div>
+
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 flex flex-col gap-4">
+        <div>
+            <p class="text-xs text-gray-400">Employee ID</p>
+            <p class="text-gray-900 font-medium">{{ record.employee_id }}</p>
+        </div>
+        <div>
+            <p class="text-xs text-gray-400">Company Email</p>
+            <p class="text-gray-900 font-medium">{{ record.company_email }}</p>
+        </div>
+        <div>
+            <p class="text-xs text-gray-400">Role</p>
+            <p class="text-gray-900 font-medium">{{ record.get_role_display }}</p>
+        </div>
+        <div>
+            <p class="text-xs text-gray-400">Full Name</p>
+            <p class="text-gray-900 font-medium">{% if record.full_name %}{{ record.full_name }}{% else %}Not provided{% endif %}</p>
+        </div>
+        <div>
+            <p class="text-xs text-gray-400">Phone Number</p>
+            <p class="text-gray-900 font-medium">{% if record.phone_number %}{{ record.phone_number }}{% else %}Not provided{% endif %}</p>
+        </div>
+        <div>
+            <p class="text-xs text-gray-400">Blood Group</p>
+            <p class="text-gray-900 font-medium">{% if record.blood_group %}{{ record.blood_group }}{% else %}Not provided{% endif %}</p>
+        </div>
+        <div>
+            <p class="text-xs text-gray-400">Address</p>
+            <p class="text-gray-900 font-medium">{% if record.address %}{{ record.address }}{% else %}Not provided{% endif %}</p>
+        </div>
+        <div>
+            <p class="text-xs text-gray-400">Department</p>
+            <p class="text-gray-900 font-medium">
+                {% if record.department %}{{ record.department.name }}{% else %}Unassigned{% endif %}
+            </p>
+        </div>
+        <div>
+            <p class="text-xs text-gray-400">Manager</p>
+            <p class="text-gray-900 font-medium">
+                {% if record.department.manager %}
+                    {{ record.department.manager.employee_id }} ({{ record.department.manager.company_email }})
+                {% else %}
+                    No manager assigned
+                {% endif %}
+            </p>
+        </div>
+        {% if record.role == 'MGR' %}
+        <div>
+            <p class="text-xs text-gray-400">Manages</p>
+            {% if record.managed_department.all %}
+                <ul class="text-gray-900 font-medium list-disc list-inside">
+                    {% for dept in record.managed_department.all %}
+                        <li>{{ dept.name }} ({{ dept.employees.count }} employees)</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-gray-900">Not managing any department</p>
+            {% endif %}
+        </div>
+        {% endif %}
+        <div>
+            <p class="text-xs text-gray-400">Status</p>
+            {% if record.is_registered %}
+                <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">Registered</span>
+            {% else %}
+                <span class="bg-yellow-100 text-yellow-700 text-xs px-2 py-1 rounded-full">Pending</span>
+            {% endif %}
+        </div>
+        <div>
+            <p class="text-xs text-gray-400">Added On</p>
+            <p class="text-gray-900">{{ record.added_at|date:"M d, Y — h:i A" }}</p>
+        </div>
+        <div>
+            <p class="text-xs text-gray-400">Registered On</p>
+            <p class="text-gray-900">
+                {% if record.registered_at %}{{ record.registered_at|date:"M d, Y — h:i A" }}{% else %}Not yet registered{% endif %}
+            </p>
+        </div>
+
+        <div class="flex gap-3 mt-2">
+            <a href="{% url 'edit_employee' record.pk %}" class="bg-teal-900 hover:bg-teal-800 text-white font-medium px-4 py-2 rounded-md text-sm">Edit</a>
+            <a href="{% url 'delete_employee' record.pk %}" class="bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-md text-sm">Delete</a>
+            <a href="{% url 'reset_password' record.pk %}" class="border border-gray-300 text-gray-700 font-medium px-4 py-2 rounded-md text-sm hover:bg-gray-50">Reset Password</a>
+            <a href="{% url 'employees' %}" class="border border-gray-300 text-gray-700 font-medium px-4 py-2 rounded-md text-sm hover:bg-gray-50">Back</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

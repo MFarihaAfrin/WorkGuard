@@ -1,0 +1,78 @@
+{% extends 'accounts/dashboard_base.html' %}
+
+{% block title %}Add Employee - WorkGuard{% endblock %}
+{% block has_sidebar %}{% endblock %}
+
+{% block toggle_btn %}
+<button onclick="toggleSidebar()" class="text-gray-700 hover:text-gray-900 text-xl"><i class="fa-solid fa-bars"></i></button>
+{% endblock %}
+
+{% block sidebar_nav %}
+<a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-house w-5"></i> Dashboard
+</a>
+<a href="{% url 'employees' %}" class="flex items-center gap-3 px-3 py-2 rounded-md bg-teal-800 font-medium">
+    <i class="fa-solid fa-users w-5"></i> Employees
+</a>
+<a href="{% url 'departments' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-building w-5"></i> Departments
+</a>
+{% endblock %}
+
+{% block main_class %}p-4 md:p-8 flex justify-center{% endblock %}
+
+{% block content %}
+<div class="max-w-lg">
+    <h1 class="text-2xl font-bold text-gray-900 mb-1">Add Employee</h1>
+    <p class="text-gray-500 mb-6">Pre-approve a new employee, manager, or HR account.</p>
+
+    {% if error %}
+        <p class="bg-red-100 text-red-700 text-sm p-3 rounded-md mb-4">{{ error }}</p>
+    {% endif %}
+
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+        <form method="POST" class="flex flex-col gap-4">
+            {% csrf_token %}
+            <div>
+                <label class="text-sm font-semibold block mb-1">Employee ID</label>
+                <input type="text" name="employee_id" required
+                       class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-800">
+            </div>
+            <div>
+                <label class="text-sm font-semibold block mb-1">Company Email</label>
+                <input type="email" name="company_email" required
+                       class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-800">
+            </div>
+            <div>
+                <label class="text-sm font-semibold block mb-1">Role</label>
+                <select name="role" required
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-800">
+                    <option value="EMP">Employee</option>
+                    <option value="MGR">Manager</option>
+                    <option value="HRF">HR/Finance Admin</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-sm font-semibold block mb-1">Department</label>
+                <select name="department"
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-800">
+                    <option value="">— No department —</option>
+                    {% for dept in departments %}
+                        <option value="{{ dept.pk }}">{{ dept.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="text-sm font-semibold block mb-1">Temporary Password</label>
+                <input type="text" name="temp_password" required
+                       class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-800">
+                <p class="text-xs text-gray-400 mt-1">Share this with the employee — they'll use it once to register.</p>
+            </div>
+            <div class="flex gap-3 mt-2">
+                <button type="submit" class="bg-teal-900 hover:bg-teal-800 text-white font-medium px-5 py-2 rounded-md">Add Employee</button>
+                <a href="{% url 'employees' %}" class="border border-gray-300 text-gray-700 font-medium px-5 py-2 rounded-md hover:bg-gray-50">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

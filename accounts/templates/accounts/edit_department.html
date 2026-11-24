@@ -1,0 +1,51 @@
+{% extends 'accounts/dashboard_base.html' %}
+
+{% block title %}Edit Department - WorkGuard{% endblock %}
+{% block has_sidebar %}{% endblock %}
+
+{% block toggle_btn %}
+<button onclick="toggleSidebar()" class="text-gray-700 hover:text-gray-900 text-xl"><i class="fa-solid fa-bars"></i></button>
+{% endblock %}
+
+{% block sidebar_nav %}
+<a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-house w-5"></i> Dashboard
+</a>
+<a href="{% url 'employees' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-users w-5"></i> Employees
+</a>
+<a href="{% url 'departments' %}" class="flex items-center gap-3 px-3 py-2 rounded-md bg-teal-800 font-medium">
+    <i class="fa-solid fa-building w-5"></i> Departments
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-xl border border-gray-200 shadow-sm p-8 max-w-md w-full">
+    <h2 class="text-xl font-bold text-gray-900 mb-4">Edit Department</h2>
+
+    <form method="POST" class="flex flex-col gap-4">
+        {% csrf_token %}
+        <div>
+            <label class="text-sm font-semibold block mb-1">Department Name</label>
+            <input type="text" name="name" value="{{ department.name }}" required
+                   class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-800">
+        </div>
+        <div>
+            <label class="text-sm font-semibold block mb-1">Manager</label>
+            <select name="manager"
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-800">
+                <option value="">— No manager assigned —</option>
+                {% for mgr in managers %}
+                    <option value="{{ mgr.pk }}" {% if department.manager_id == mgr.pk %}selected{% endif %}>
+                        {{ mgr.employee_id }} ({{ mgr.company_email }})
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="flex gap-3 mt-2">
+            <button type="submit" class="bg-teal-900 hover:bg-teal-800 text-white font-medium px-5 py-2 rounded-md">Save Changes</button>
+            <a href="{% url 'departments' %}" class="border border-gray-300 text-gray-700 font-medium px-5 py-2 rounded-md hover:bg-gray-50">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'accounts/base.html' %}
+{% block has_sidebar %}{% endblock %}
+
+{% block toggle_btn %}
+<button onclick="toggleSidebar()" class="text-gray-700 hover:text-gray-900 text-xl"><i class="fa-solid fa-bars"></i></button>
+{% endblock %}
+
+{% block sidebar_nav %}
+<a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">Dashboard</a>
+<a href="{% url 'employees' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">Employees</a>
+<a href="{% url 'departments' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">Departments</a>
+{% endblock %}
+
+{% block main_class %}p-4 md:p-8{% endblock %}

@@ -1,0 +1,88 @@
+{% extends 'accounts/dashboard_base.html' %}
+{% block title %}Reports - WorkGuard{% endblock %}
+{% block has_sidebar %}{% endblock %}
+{% block toggle_btn %}<button onclick="toggleSidebar()" class="text-gray-700 hover:text-gray-900 text-xl"><i class="fa-solid fa-bars"></i></button>{% endblock %}
+
+{% block sidebar_nav %}
+<a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-house w-5"></i> Dashboard
+</a>
+<a href="{% url 'employees' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-users w-5"></i> Employees
+</a>
+<a href="{% url 'departments' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-building w-5"></i> Departments
+</a>
+<a href="{% url 'budget_overview' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-sack-dollar w-5"></i> Budgets
+</a>
+<a href="{% url 'all_attendance' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-clock w-5"></i> Attendance
+</a>
+<a href="{% url 'final_approval' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-receipt w-5"></i> Expense Claims
+</a>
+<a href="{% url 'all_leave' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-calendar-days w-5"></i> Leave
+</a>
+<a href="{% url 'reports' %}" class="flex items-center gap-3 px-3 py-2 rounded-md bg-teal-800 font-medium">
+    <i class="fa-solid fa-chart-simple w-5"></i> Reports
+</a>
+{% endblock %}
+
+{% block main_class %}p-4 md:p-8{% endblock %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-900">Company Reports</h1>
+    <button onclick="window.print()" class="bg-teal-900 hover:bg-teal-800 text-white font-medium px-4 py-2 rounded-md text-sm no-print">
+        <i class="fa-solid fa-file-pdf mr-1"></i> Download PDF
+    </button>
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
+    <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+        <p class="text-sm text-gray-500">Total Claims</p>
+        <p class="text-3xl font-bold text-gray-900 mt-1">{{ total_claims }}</p>
+    </div>
+    <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+        <p class="text-sm text-gray-500">Approval Rate</p>
+        <p class="text-3xl font-bold text-gray-900 mt-1">{{ approval_rate }}%</p>
+    </div>
+    <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+        <p class="text-sm text-gray-500">Total Approved Amount</p>
+        <p class="text-3xl font-bold text-gray-900 mt-1">${{ total_amount }}</p>
+    </div>
+</div>
+
+<div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-8">
+    <h2 class="font-semibold text-gray-900 mb-4">Expense Claims Breakdown</h2>
+    <div class="flex justify-between text-sm mb-2">
+        <span class="text-gray-600">Approved</span><span class="font-semibold">{{ approved_claims }}</span>
+    </div>
+    <div class="flex justify-between text-sm mb-2">
+        <span class="text-gray-600">Rejected</span><span class="font-semibold">{{ rejected_claims }}</span>
+    </div>
+    <div class="flex justify-between text-sm">
+        <span class="text-gray-600">Average Claim Amount</span><span class="font-semibold">${{ avg_amount }}</span>
+    </div>
+</div>
+
+<div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+    <h2 class="font-semibold text-gray-900 mb-4">Leave Summary</h2>
+    <div class="flex justify-between text-sm mb-2">
+        <span class="text-gray-600">Total Requests</span><span class="font-semibold">{{ total_leave }}</span>
+    </div>
+    <div class="flex justify-between text-sm">
+        <span class="text-gray-600">Approved</span><span class="font-semibold">{{ approved_leave }}</span>
+    </div>
+</div>
+
+<style>
+@media print {
+    .no-print, aside, header, footer { display: none !important; }
+    body { background: white !important; }
+}
+</style>
+
+{% endblock %}

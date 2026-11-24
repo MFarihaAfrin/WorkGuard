@@ -1,0 +1,60 @@
+{% extends 'accounts/base.html' %}
+{% block title %}FAQ - WorkGuard{% endblock %}
+{% block content %}
+<div class="max-w-2xl w-full py-12 px-4">
+
+    {% if user.is_authenticated %}
+    <!-- ================= AFTER LOGIN ================= -->
+
+    <h1 class="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h1>
+    <div class="space-y-5">
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+            <p class="font-semibold text-gray-900 mb-1">How many days of leave can I request?</p>
+            <p class="text-sm text-gray-600">Up to 3 days can be requested through the portal. For longer leave, please contact HR directly.</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+            <p class="font-semibold text-gray-900 mb-1">Do I need a document for Sick Leave?</p>
+            <p class="text-sm text-gray-600">Yes, a medical certificate is required when applying for Sick Leave.</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+            <p class="font-semibold text-gray-900 mb-1">How are expense claims approved?</p>
+            <p class="text-sm text-gray-600">Your Manager reviews and approves first, followed by a final approval from HR/Finance before payment is issued.</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+            <p class="font-semibold text-gray-900 mb-1">What receipt formats are accepted?</p>
+            <p class="text-sm text-gray-600">JPG and PNG images only, under 5MB.</p>
+        </div>
+    </div>
+
+    {% else %}
+    <!-- ================= BEFORE LOGIN ================= -->
+
+    <h1 class="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h1>
+    <div class="space-y-5">
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+            <p class="font-semibold text-gray-900 mb-1">What is WorkGuard?</p>
+            <p class="text-sm text-gray-600">WorkGuard is a web-based workplace management systemfor managing employee attendance, leave, expenses, approvals and reimbursements.</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+            <p class="font-semibold text-gray-900 mb-1">Who can use WorkGuard?</p>
+            <p class="text-sm text-gray-600">WorkGuard is designed for authorized Employees, Managers and HR/Finance users within the organization.</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+            <p class="font-semibold text-gray-900 mb-1">How do I register?</p>
+            <p class="text-sm text-gray-600">Employees must use the employee ID, company email and temporary password provided by the organization to complete registration.</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+            <p class="font-semibold text-gray-900 mb-1">I cannot log in. What should I do?</p>
+            <p class="text-sm text-gray-600">Please contact your organization's HR department for account or registration-related problems.</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+            <p class="font-semibold text-gray-900 mb-1">What features does WorkGuard provide?</p>
+            <p class="text-sm text-gray-600">WorkGuard provides attendance tracking, leave management, expense claims, receipt OCR, AI assisted risk analysis, approvals, notifications and reporting.</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+            <p class="font-semibold text-gray-900 mb-1">Where can I get help?</p>
+            <p class="text-sm text-gray-600">For account or workplace-related issues, contact your organization's HR department. For WorkGuard technical support, contact the WorkGuard support team.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

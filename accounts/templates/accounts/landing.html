@@ -1,0 +1,386 @@
+{% extends 'accounts/base.html' %} 
+{% block title %}Welcome - WorkGuard{% endblock %} 
+{% block main_class %} w-full {% endblock %} 
+{% block content %}
+
+<div class="w-full overflow-hidden">
+  <!-- ================= HERO ================= -->
+  <section
+    class="relative bg-gradient-to-br from-teal-900 via-teal-800 to-teal-700 text-white"
+  >
+    <!-- Decorative circles -->
+    <div
+      class="absolute -top-32 -right-32 w-96 h-96 bg-teal-600/30 rounded-full"
+    ></div>
+    <div
+      class="absolute bottom-0 -left-20 w-64 h-64 bg-teal-500/20 rounded-full"
+    ></div>
+
+    <div class="relative max-w-6xl mx-auto px-6 py-20 lg:py-24">
+      <div class="grid lg:grid-cols-2 gap-14 items-center">
+        <!-- Hero text -->
+        <div>
+          <span
+            class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2 text-sm text-teal-100"
+          >
+            <i class="fa-solid fa-shield-halved"></i>
+            Smart Workplace Management
+          </span>
+
+          <h1
+            class="mt-6 text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight"
+          >
+            Manage Your Workplace
+
+            <span class="text-teal-300"> Smarter. </span>
+          </h1>
+
+          <p class="mt-6 text-lg text-teal-100 leading-8 max-w-xl">
+            WorkGuard brings attendance, leave, expenses and approvals together
+            in one simple workplace management platform.
+          </p>
+
+          <div class="flex flex-wrap gap-4 mt-8">
+            <a
+              href="{% url 'register' %}"
+              class="inline-flex items-center gap-2 bg-white text-teal-900 hover:bg-teal-50 font-semibold px-6 py-3 rounded-full shadow-lg transition"
+            >
+              Get Started
+
+              <i class="fa-solid fa-arrow-right text-sm"></i>
+            </a>
+
+            <a
+              href="#features"
+              class="inline-flex items-center gap-2 border border-white/40 hover:bg-white/10 text-white font-medium px-6 py-3 rounded-full transition"
+            >
+              Explore Features
+            </a>
+          </div>
+
+          <div class="flex items-center gap-6 mt-8 text-sm text-teal-200">
+            <span>
+              <i class="fa-solid fa-check text-teal-300 mr-1"></i>
+              Easy to use
+            </span>
+
+            <span>
+              <i class="fa-solid fa-check text-teal-300 mr-1"></i>
+              Secure
+            </span>
+
+            <span>
+              <i class="fa-solid fa-check text-teal-300 mr-1"></i>
+              AI assisted
+            </span>
+          </div>
+        </div>
+
+        <!-- Dashboard preview -->
+        <div class="relative">
+          <div
+            class="absolute inset-0 bg-teal-400/20 blur-3xl rounded-full"
+          ></div>
+
+          <div
+            class="relative bg-white rounded-2xl shadow-2xl p-5 text-gray-800 border border-white/20"
+          >
+            <!-- Fake browser bar -->
+            <div
+              class="flex items-center gap-2 border-b border-gray-100 pb-4 mb-5"
+            >
+              <span class="w-3 h-3 bg-red-400 rounded-full"></span>
+              <span class="w-3 h-3 bg-yellow-400 rounded-full"></span>
+              <span class="w-3 h-3 bg-green-400 rounded-full"></span>
+
+              <div class="ml-3 flex-1 bg-gray-100 rounded-full h-7"></div>
+            </div>
+
+            <div class="flex justify-between items-center mb-5">
+              <div>
+                <p class="text-xs text-gray-400">WORKGUARD</p>
+
+                <h3 class="text-lg font-bold text-teal-900">Dashboard</h3>
+              </div>
+
+              <div
+                class="w-9 h-9 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center"
+              >
+                <i class="fa-solid fa-user"></i>
+              </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-3 gap-3">
+              <div class="bg-teal-50 rounded-xl p-4">
+                <div class="text-teal-600 text-sm mb-2">
+                  <i class="fa-solid fa-calendar-check"></i>
+                </div>
+
+                <p class="text-xs text-gray-500">Attendance</p>
+
+                <p class="text-2xl font-bold text-teal-900">95%</p>
+              </div>
+
+              <div class="bg-blue-50 rounded-xl p-4">
+                <div class="text-blue-600 text-sm mb-2">
+                  <i class="fa-solid fa-receipt"></i>
+                </div>
+
+                <p class="text-xs text-gray-500">Claims</p>
+
+                <p class="text-2xl font-bold text-gray-800">12</p>
+              </div>
+
+              <div class="bg-green-50 rounded-xl p-4">
+                <div class="text-green-600 text-sm mb-2">
+                  <i class="fa-solid fa-shield-halved"></i>
+                </div>
+
+                <p class="text-xs text-gray-500">Risk</p>
+
+                <p class="text-lg font-bold text-green-600 mt-1">Low</p>
+              </div>
+            </div>
+
+            <!-- Activity -->
+            <div class="mt-5 border border-gray-100 rounded-xl p-4">
+              <div class="flex justify-between mb-4">
+                <span class="font-semibold text-gray-700">
+                  Monthly Attendance
+                </span>
+
+                <span class="text-xs text-teal-600"> +8.4% </span>
+              </div>
+
+              <div class="flex items-end gap-2 h-28">
+                <div class="flex-1 bg-teal-100 rounded-t h-12"></div>
+                <div class="flex-1 bg-teal-200 rounded-t h-16"></div>
+                <div class="flex-1 bg-teal-300 rounded-t h-14"></div>
+                <div class="flex-1 bg-teal-400 rounded-t h-20"></div>
+                <div class="flex-1 bg-teal-500 rounded-t h-24"></div>
+                <div class="flex-1 bg-teal-600 rounded-t h-20"></div>
+                <div class="flex-1 bg-teal-700 rounded-t h-28"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FEATURES ================= -->
+
+  <section id="features" class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-14">
+        <span
+          class="text-sm font-semibold uppercase tracking-wider text-teal-600"
+          >What You Get</span
+        >
+        <h2 class="mt-3 text-3xl sm:text-4xl font-bold text-teal-900">
+          Everything in One Platform
+        </h2>
+        <p class="mt-4 text-gray-600 max-w-xl mx-auto">
+          Three core modules, working together, with AI-assisted checks along
+          the way.
+        </p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-slate-50 rounded-xl p-6 border border-gray-100">
+          <div
+            class="w-11 h-11 bg-teal-100 text-teal-700 rounded-lg flex items-center justify-center mb-4"
+          >
+            <i class="fa-solid fa-clock"></i>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-1">Smart Attendance</h3>
+          <p class="text-sm text-gray-500">
+            Check-in/out with automatic status detection and an overtime
+            fairness rule.
+          </p>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-6 border border-gray-100">
+          <div
+            class="w-11 h-11 bg-teal-100 text-teal-700 rounded-lg flex items-center justify-center mb-4"
+          >
+            <i class="fa-solid fa-calendar-days"></i>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-1">Leave Management</h3>
+          <p class="text-sm text-gray-500">
+            Self-service leave requests with manager approval and balance
+            tracking.
+          </p>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-6 border border-gray-100">
+          <div
+            class="w-11 h-11 bg-teal-100 text-teal-700 rounded-lg flex items-center justify-center mb-4"
+          >
+            <i class="fa-solid fa-receipt"></i>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-1">Expense Claims</h3>
+          <p class="text-sm text-gray-500">
+            Receipt uploads, two-stage approval, and full payment tracking.
+          </p>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-6 border border-gray-100">
+          <div
+            class="w-11 h-11 bg-teal-100 text-teal-700 rounded-lg flex items-center justify-center mb-4"
+          >
+            <i class="fa-solid fa-file-image"></i>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-1">OCR Receipt Reading</h3>
+          <p class="text-sm text-gray-500">
+            Automatically reads receipt photos and flags mismatched amounts.
+          </p>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-6 border border-gray-100">
+          <div
+            class="w-11 h-11 bg-teal-100 text-teal-700 rounded-lg flex items-center justify-center mb-4"
+          >
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-1">AI Risk Prediction</h3>
+          <p class="text-sm text-gray-500">
+            A trained model flags Low/Medium/High risk claims before approval.
+          </p>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-6 border border-gray-100">
+          <div
+            class="w-11 h-11 bg-teal-100 text-teal-700 rounded-lg flex items-center justify-center mb-4"
+          >
+            <i class="fa-solid fa-users-gear"></i>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-1">Role-Based Access</h3>
+          <p class="text-sm text-gray-500">
+            Employee, Manager, and HR each see exactly what they need — nothing
+            more.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= AI SECTION ================= -->
+
+  <section class="bg-slate-50 py-20">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid lg:grid-cols-2 gap-14 items-center">
+        <div>
+          <span
+            class="inline-block text-sm font-semibold uppercase tracking-wider text-teal-600"
+          >
+            Intelligent Verification
+          </span>
+
+          <h2 class="mt-3 text-3xl sm:text-4xl font-bold text-teal-900">
+            Smarter Expense Verification
+          </h2>
+
+          <p class="mt-5 text-gray-600 leading-7 max-w-lg">
+            WorkGuard combines receipt OCR and risk prediction to help managers
+            review expense claims faster and with better information.
+          </p>
+
+          <div class="mt-7 space-y-4">
+            {% for step in verification_steps %}
+
+            <div class="flex gap-4 items-start">
+              <div
+                class="flex-shrink-0 w-10 h-10 bg-teal-700 text-white rounded-full flex items-center justify-center"
+              >
+                <i class="{{ step.icon }}"></i>
+              </div>
+
+              <div>
+                <h3 class="font-semibold text-gray-800">{{ step.title }}</h3>
+
+                <p class="text-sm text-gray-500 mt-1">{{ step.description }}</p>
+              </div>
+            </div>
+
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- AI visual -->
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-lg p-7">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs uppercase tracking-wider text-gray-400">
+                Expense Analysis
+              </p>
+
+              <h3 class="text-xl font-bold text-teal-900 mt-1">
+                Claim #WG-1024
+              </h3>
+            </div>
+
+            <span
+              class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full"
+            >
+              Low Risk
+            </span>
+          </div>
+
+          <div class="mt-6 bg-slate-50 rounded-xl p-5">
+            <div class="flex justify-between text-sm mb-3">
+              <span class="text-gray-500"> Receipt </span>
+
+              <span class="font-medium text-gray-700"> Verified </span>
+            </div>
+
+            <div class="h-2 bg-gray-200 rounded-full">
+              <div class="h-2 bg-teal-600 rounded-full w-full"></div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mt-5">
+              <div class="bg-white rounded-lg p-4">
+                <p class="text-xs text-gray-400">Amount</p>
+
+                <p class="font-bold text-gray-800 mt-1">$245.00</p>
+              </div>
+
+              <div class="bg-white rounded-lg p-4">
+                <p class="text-xs text-gray-400">Confidence</p>
+
+                <p class="font-bold text-teal-700 mt-1">98.4%</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CTA ================= -->
+
+  <section class="bg-teal-800 text-white">
+    <div class="max-w-4xl mx-auto text-center px-6 py-20">
+      <div
+        class="w-14 h-14 mx-auto rounded-full bg-white/10 flex items-center justify-center"
+      >
+        <i class="fa-solid fa-rocket text-teal-300 text-xl"></i>
+      </div>
+
+      <h2 class="mt-6 text-3xl sm:text-4xl font-bold">
+        Ready to make workplace management smarter?
+      </h2>
+
+      <p class="mt-4 text-teal-200 max-w-xl mx-auto">
+        Bring attendance, expenses and approvals together with WorkGuard.
+      </p>
+
+      <a
+        href="{% url 'register' %}"
+        class="inline-flex items-center gap-2 mt-8 bg-white text-teal-900 hover:bg-teal-50 font-semibold px-7 py-3 rounded-full transition"
+      >
+        Get Started
+
+        <i class="fa-solid fa-arrow-right text-sm"></i>
+      </a>
+    </div>
+  </section>
+</div>
+
+{% endblock %}

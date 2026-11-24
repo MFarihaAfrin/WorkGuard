@@ -1,0 +1,335 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+  <title>{% block title %}WorkGuard{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="bg-slate-100 min-h-screen flex flex-col">
+  <div class="flex flex-1">
+    <aside id="sidebar" class="w-64 bg-teal-900 text-white flex flex-col fixed inset-y-0 left-0 z-40 -translate-x-full transition-transform duration-300 {% block has_sidebar %}hidden{% endblock %}">
+      <div class="px-6 py-5 border-b border-teal-800 flex justify-between items-center">
+        <span class="text-xl font-bold">Touch & Solve</span>
+        <button onclick="toggleSidebar()" class="text-teal-200 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <nav class="flex-1 px-3 py-4 flex flex-col gap-1 text-sm">
+        {% block sidebar_nav %}{% endblock %}
+      </nav>
+      <div class="px-3">
+        <a href="{% url 'my_profile' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800 text-sm">
+          <i class="fa-solid fa-id-card w-5"></i> My Profile
+        </a>
+      </div>
+      <div class="px-3 py-4 border-t border-teal-800">
+        <form method="POST" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800 w-full text-left">
+            <i class="fa-solid fa-right-from-bracket w-5"></i> Logout
+          </button>
+        </form>
+      </div>
+    </aside>
+    <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/10 z-30 hidden"></div>
+    <div id="mainWrapper" class="flex-1 flex flex-col transition-all duration-300 ml-0">
+      {% block header %}
+      <header class="sticky top-0 z-10 bg-white shadow-sm px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-4">
+          {% block toggle_btn %}{% endblock %}
+          
+          <a href="{% url 'landing' %}" class="flex items-center gap-3">
+
+              {% if user.is_authenticated %}
+                  <!-- After Login -->
+                  <img src="{% static 'accounts/images/touchsolve_logo.png' %}" class="h-10 w-20" alt="Touch & Solve logo">
+
+                  <div class="hidden sm:block leading-tight">
+                      <p class="font-bold text-teal-900">Touch & Solve</p>
+                      <p class="text-xs text-gray-500">WorkGuard</p>
+                  </div>
+
+              {% else %}
+                  <!-- Before Login -->
+                  <img src="{% static 'accounts/images/logo.png' %}" class="h-10 w-20" alt="WorkGuard logo">
+
+                  <div class="hidden sm:block leading-tight">
+                      <p class="font-bold text-teal-900 text-lg">WorkGuard</p>
+                  </div>
+
+              {% endif %}
+
+          </a>
+        </div>
+
+        {% if user.is_authenticated %}
+
+            <!-- Navigation after login -->
+            <nav class="hidden md:flex gap-8 text-sm font-medium text-gray-700">
+
+                <a href="{% url 'dashboard' %}" class="hover:text-teal-600">
+                    Dashboard
+                </a>
+
+                <a href="{% url 'faq' %}" class="hover:text-teal-600">
+                    FAQ
+                </a>
+
+                <a href="{% url 'contact' %}" class="hover:text-teal-600">
+                    Contact
+                </a>
+
+            </nav>
+
+        {% else %}
+
+            <!-- Navigation before login -->
+            <nav class="hidden md:flex gap-8 text-sm font-medium text-gray-700">
+
+                <div class="relative group">
+                    <button class="flex items-center gap-1 hover:text-teal-600">
+                        FAQ
+                        <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                    </button>
+                    <div class="absolute left-0 top-full mt-2 w-72 bg-white text-gray-800 rounded-lg shadow-lg border border-gray-100 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition">
+                      <a href="{% url 'faq' %}#leave" class="block px-4 py-2 text-sm hover:bg-gray-50">What is WorkGuard?</a>
+                      <a href="{% url 'faq' %}#sick" class="block px-4 py-2 text-sm hover:bg-gray-50">Who can use WorkGuard?</a>
+                      <a href="{% url 'faq' %}#claims" class="block px-4 py-2 text-sm hover:bg-gray-50">How do I register?</a>
+
+                      <div class="border-t border-gray-100 mt-1 pt-1">
+                        <a href="{% url 'faq' %}" class="block px-4 py-2 text-sm font-medium text-teal-700 hover:bg-gray-50">View all FAQs →</a>
+                      </div>
+                    </div>
+                  </div>
+                  <a href="{% url 'contact' %}" class="hover:text-teal-600">
+                    Contact
+                </a>
+
+            </nav>
+
+        {% endif %}
+
+        <div class="flex items-center gap-3">
+
+          <a href="{% url 'notifications' %}" class="relative text-gray-600 hover:text-teal-700">
+            <i class="fa-regular fa-bell text-lg"></i>
+            {% if unread_count > 0 %}
+                <span class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">{{ unread_count }}</span>
+            {% endif %}
+          </a>
+
+          {% if user.is_authenticated %}
+            <span class="hidden sm:inline text-sm text-gray-700">Hi, {{ user.username }}</span>
+            <form method="POST" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="bg-teal-700 hover:bg-teal-600 text-white text-sm font-medium px-4 py-2 rounded-full">Logout</button>
+            </form>
+          {% else %}
+            <a href="{% url 'login' %}" class="text-sm font-medium text-gray-700 hover:text-teal-600">Login</a>
+            <a href="{% url 'register' %}"><button class="bg-teal-800 hover:bg-teal-600 text-white text-sm font-medium px-4 py-2 rounded-full">Register</button></a>
+          {% endif %}
+        </div>
+      </header>
+      {% endblock %}
+      <main class="flex-1 {% block main_class %}flex items-center justify-center px-4{% endblock %}">
+        {% block content %}{% endblock %}
+      </main>
+    
+
+    {% block footer %}
+    <footer class="bg-teal-900 text-gray-300">
+
+    <div class="max-w-6xl mx-auto px-6 py-10 grid grid-cols-1 sm:grid-cols-3 gap-8">
+
+        {% if user.is_authenticated %}
+
+            <!-- ================= AFTER LOGIN ================= -->
+
+            <!-- Column 1: Branding -->
+            <div>
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="leading-tight">
+                    <span class="block font-bold text-white text-lg">Touch & Solve</span>
+                    <span class="block text-xs text-teal-300">WorkGuard</span>
+                  </div>
+                </div>
+
+                <p class="text-sm text-teal-300 leading-relaxed">
+                    WorkGuard is an internal workplace management system
+                    for attendance, leave, expenses, approvals, and
+                    reimbursements.
+                </p>
+            </div>
+
+
+            <!-- Column 2: Quick Links -->
+            <div>
+                <h3 class="text-white font-semibold mb-3"> Quick Links</h3>
+                <ul class="space-y-2 text-sm">
+                    <li>
+                        <a href="{% url 'dashboard' %}"
+                           class="hover:text-white">
+                            Dashboard
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{% url 'faq' %}"
+                           class="hover:text-white">
+                            FAQ
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{% url 'contact' %}"
+                           class="hover:text-white">
+                            Contact
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{% url 'my_profile' %}"
+                           class="hover:text-white">
+                            My Profile
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+
+            <!-- Column 3: Contact -->
+            <div>
+                <h3 class="text-white font-semibold mb-3">
+                    Contact
+                </h3>
+
+                {% if user.role == 'HRF' %}
+                <p class="text-sm flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-envelope"></i>
+                    hr@workguard.com
+                </p>
+                {% else %}
+                <p class="text-sm flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-envelope"></i>
+                    hr@touchandsolve.com
+                </p>
+                {% endif %}
+
+                <p class="text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-location-dot"></i>
+                    Dhaka, Bangladesh
+                </p>
+            </div>
+
+
+        {% else %}
+
+            <!-- ================= BEFORE LOGIN ================= -->
+
+            <!-- Column 1: Branding -->
+            <div>
+                <div class="flex items-center gap-3 mb-3">
+                    <span class="font-bold text-white text-lg">
+                        WorkGuard
+                    </span>
+
+                </div>
+
+                <p class="text-sm text-teal-300 leading-relaxed">
+                    A smart workplace management system helping
+                    organizations manage attendance, leave,
+                    expenses, and approvals in one place.
+                </p>
+            </div>
+
+
+            <!-- Column 2: Quick Links -->
+            <div>
+                <h3 class="text-white font-semibold mb-3">
+                    Quick Links
+                </h3>
+
+                <ul class="space-y-2 text-sm">
+
+                    <li>
+                        <a href="{% url 'faq' %}"
+                           class="hover:text-white">
+                            FAQ
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{% url 'contact' %}"
+                           class="hover:text-white">
+                            Contact
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{% url 'login' %}"
+                           class="hover:text-white">
+                            Login
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{% url 'register' %}"
+                           class="hover:text-white">
+                            Register
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+
+            <!-- Column 3: Contact -->
+            <div>
+                <h3 class="text-white font-semibold mb-3">
+                    Contact
+                </h3>
+
+                <p class="text-sm flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-envelope"></i>
+                    hr@workguard.com
+                </p>
+
+                <p class="text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-location-dot"></i>
+                    Dhaka, Bangladesh
+                </p>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ================= FOOTER BOTTOM ================= -->
+
+    <div class="border-t border-teal-800 px-6 py-4 text-center text-xs text-teal-400">
+
+        {% if user.is_authenticated %}
+            &copy; 2026 Touch & Solve | Powered by WorkGuard
+        {% else %}
+            &copy; 2026 WorkGuard — Smart Attendance and Expense Approval System
+        {% endif %}
+
+    </div>
+
+    </footer>
+    {% endblock %}
+    </div>
+
+  <script>
+  function toggleSidebar(){
+    document.getElementById('sidebar').classList.toggle('-translate-x-full');
+    document.getElementById('sidebarOverlay').classList.toggle('hidden');
+
+    if (window.innerWidth >= 768) {
+      document.getElementById('mainWrapper').classList.toggle('ml-64');
+    }
+  }
+  </script>
+</body>
+</html>

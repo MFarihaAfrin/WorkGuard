@@ -1,0 +1,143 @@
+{% extends 'accounts/dashboard_base.html' %}
+
+{% block title %}All Attendance - WorkGuard{% endblock %}
+{% block has_sidebar %}{% endblock %}
+
+{% block toggle_btn %}
+<button onclick="toggleSidebar()" class="text-gray-700 hover:text-gray-900 text-xl"><i class="fa-solid fa-bars"></i></button>
+{% endblock %}
+
+{% block sidebar_nav %}
+<a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-house w-5"></i> Dashboard
+</a>
+<a href="{% url 'employees' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-users w-5"></i> Employees
+</a>
+<a href="{% url 'departments' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-building w-5"></i> Departments
+</a>
+<a href="{% url 'budget_overview' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-sack-dollar w-5"></i> Budgets
+</a>
+<a href="{% url 'all_attendance' %}" class="flex items-center gap-3 px-3 py-2 rounded-md bg-teal-800 font-medium">
+    <i class="fa-solid fa-clock w-5"></i> Attendance
+</a>
+<a href="{% url 'final_approval' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-receipt w-5"></i> Expense Claims
+</a>
+<a href="{% url 'all_leave' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-calendar-days w-5"></i> Leave
+</a>
+<a href="{% url 'reports' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-chart-simple w-5"></i> Reports
+</a>
+{% endblock %}
+
+{% block main_class %}p-4 md:p-8{% endblock %}
+
+{% block content %}
+
+<!-- Header row: title on the left, summary report link on the right -->
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-1 gap-2">
+    <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+        <i class="fa-solid fa-clock text-[#0F766E]"></i> Attendance
+    </h1>
+    <a href="{% url 'attendance_report' %}"
+       class="text-[#0F766E] hover:text-[#134E4A] hover:underline text-sm font-medium inline-flex items-center gap-1">
+        <i class="fa-solid fa-chart-simple"></i> View Summary Report
+    </a>
+</div>
+<p class="text-gray-500 text-sm mb-6">Daily check-in and check-out records for every employee.</p>
+
+<!-- Filter card -->
+<div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4 mb-6">
+    <form method="GET" class="flex flex-wrap items-center gap-3">
+        <div class="relative">
+            <i class="fa-solid fa-calendar-days absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+            <input type="date" name="date" value="{{ selected_date }}"
+                   class="border border-gray-300 rounded-md pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-[#0F766E]">
+        </div>
+        <button type="submit"
+                class="bg-[#134E4A] hover:bg-[#0F766E] text-white text-sm font-medium px-4 py-2 rounded-md inline-flex items-center gap-2 transition-colors">
+            <i class="fa-solid fa-filter"></i> View
+        </button>
+        <span class="text-gray-500 text-sm ml-auto">
+            <i class="fa-solid fa-list-check mr-1"></i>
+            {{ records.count }} record{{ records.count|pluralize }}
+        </span>
+    </form>
+</div>
+
+<!-- Attendance table -->
+<div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="text-left text-gray-500 border-b border-gray-100 bg-gray-50/60">
+                    <th class="px-6 py-3 font-medium">Employee</th>
+                    <th class="px-6 py-3 font-medium">Check-in</th>
+                    <th class="px-6 py-3 font-medium">Check-out</th>
+                    <th class="px-6 py-3 font-medium">Status</th>
+                    <th class="px-6 py-3 font-medium">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr class="border-b border-gray-100 hover:bg-gray-50/60 transition-colors">
+                    <td class="px-6 py-3">
+                        <div class="flex items-center gap-2">
+                            <span class="w-7 h-7 rounded-full bg-[#134E4A]/10 text-[#134E4A] flex items-center justify-center">
+                                <i class="fa-solid fa-user text-xs"></i>
+                            </span>
+                            <span class="text-gray-900 font-medium">{{ record.employee.employee_id }}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-3 text-gray-600">
+                        {% if record.check_in_time %}
+                            <i class="fa-solid fa-arrow-right-to-bracket text-green-600 mr-1"></i>{{ record.check_in_time }}
+                        {% else %}—{% endif %}
+                    </td>
+                    <td class="px-6 py-3 text-gray-600">
+                        {% if record.check_out_time %}
+                            <i class="fa-solid fa-arrow-right-from-bracket text-gray-400 mr-1"></i>{{ record.check_out_time }}
+                        {% else %}—{% endif %}
+                    </td>
+                    <td class="px-6 py-3">
+                        {% if record.status == 'PRESENT' %}
+                            <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full inline-flex items-center gap-1">
+                                <i class="fa-solid fa-check"></i> Present</span>
+                        {% elif record.status == 'LATE' %}
+                            <span class="bg-yellow-100 text-yellow-700 text-xs px-2 py-1 rounded-full inline-flex items-center gap-1">
+                                <i class="fa-solid fa-clock"></i> Late</span>
+                        {% elif record.status == 'OVERTIME' %}
+                            <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full inline-flex items-center gap-1">
+                                <i class="fa-solid fa-bolt"></i> Overtime</span>
+                        {% elif record.status == 'EARLY_LEAVE' %}
+                            <span class="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded-full inline-flex items-center gap-1">
+                                <i class="fa-solid fa-door-open"></i> Early Leave</span>
+                        {% else %}
+                            <span class="bg-gray-100 text-gray-500 text-xs px-2 py-1 rounded-full inline-flex items-center gap-1">
+                                <i class="fa-solid fa-xmark"></i> Absent</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-3">
+                        <a href="{% url 'edit_attendance' record.pk %}"
+                           class="text-[#0F766E] hover:text-[#134E4A] hover:underline text-xs font-medium inline-flex items-center gap-1">
+                            <i class="fa-solid fa-pen-to-square"></i> Correct
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="px-6 py-10 text-center text-gray-400">
+                        <i class="fa-solid fa-inbox text-2xl mb-2 block"></i>
+                        No attendance records for today.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    body { font-family: Helvetica, sans-serif; color: #1F2937; padding: 30px; text-align: center;}
+    h1 { color: #134E4A; font-size: 18px; }
+    table { width: 100%; margin-top: 10px; border-collapse: collapse; }
+    td { padding: 6px 0; font-size: 12px; border: 1px solid #E5E7EB; }
+    td.label { color: #6B7280; width: 40%; }
+    .stamp { margin-top: 30px; color: #0F766E; font-size: 14px; font-weight: bold; }
+</style>
+</head>
+<body>
+    <h1>WorkGuard — Payment Confirmation</h1>
+    <table>
+        <tr><td class="label">Employee</td><td>{{ claim.employee.full_name }} ({{ claim.employee.employee_id }})</td></tr>
+        <tr><td class="label">Category</td><td>{{ claim.get_category_display }}</td></tr>
+        <tr><td class="label">Description</td><td>{{ claim.description }}</td></tr>
+        <tr><td class="label">Expense Date</td><td>{{ claim.expense_date }}</td></tr>
+        <tr><td class="label">Amount Paid</td><td>${{ claim.amount }}</td></tr>
+        <tr><td class="label">Payment Method</td><td>{{ claim.payment.method }}</td></tr>
+        <tr><td class="label">Reference No.</td><td>{{ claim.payment.reference_number }}</td></tr>
+        <tr><td class="label">Paid On</td><td>{{ claim.payment.paid_at }}</td></tr>
+    </table>
+    <p class="stamp">✓ Payment Completed</p>
+</body>
+</html>

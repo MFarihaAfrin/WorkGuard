@@ -1,0 +1,58 @@
+{% extends 'accounts/dashboard_base.html' %}
+{% block title %}Confirm Claim - WorkGuard{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto bg-white rounded-2xl shadow-sm p-8">
+
+    <h1 class="text-xl font-semibold text-gray-800 mb-1">Confirm Your Claim</h1>
+    <p class="text-sm text-gray-500 mb-6">
+        We've read your receipt automatically — please check the details below and
+        correct anything that looks wrong before submitting.
+    </p>
+
+    {% if error %}
+    <div class="mb-4 text-sm rounded-lg px-4 py-2 bg-red-50 text-red-700 border border-red-200">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <div class="mb-5 flex gap-4 items-start">
+        <img src="{{ claim.receipt.url }}" class="w-24 h-24 object-cover rounded-lg border border-gray-200">
+        <div class="text-sm text-gray-600">
+            <p><span class="text-gray-400">Category:</span> {{ claim.get_category_display }}</p>
+            <p><span class="text-gray-400">Description:</span> {{ claim.description }}</p>
+            {% if not claim.ocr_detected_amount %}
+            <p class="text-amber-600 mt-1">
+                <i class="fa-solid fa-triangle-exclamation"></i> Couldn't read this receipt clearly — please fill in the details below manually.
+            </p>
+            {% endif %}
+        </div>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Vendor</label>
+            <input type="text" name="vendor" value="{{ claim.vendor }}" placeholder="e.g. Shell Petrol Station"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500">
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Amount ($)</label>
+            <input type="number" step="0.01" name="amount" value="{{ claim.amount|default_if_none:'' }}"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500">
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Expense Date</label>
+            <input type="date" name="expense_date" value="{{ claim.expense_date|date:'Y-m-d' }}"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500">
+        </div>
+
+        <button type="submit" class="w-full bg-teal-800 hover:bg-teal-700 text-white font-medium py-2.5 rounded-lg">
+            Confirm & Submit Claim
+        </button>
+    </form>
+</div>
+{% endblock %}

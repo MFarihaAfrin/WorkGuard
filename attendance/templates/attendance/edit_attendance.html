@@ -1,0 +1,54 @@
+{% extends 'accounts/dashboard_base.html' %}
+
+{% block title %}Correct Attendance - WorkGuard{% endblock %}
+{% block has_sidebar %}{% endblock %}
+
+{% block toggle_btn %}
+<button onclick="toggleSidebar()" class="text-gray-700 hover:text-gray-900 text-xl"><i class="fa-solid fa-bars"></i></button>
+{% endblock %}
+
+{% block sidebar_nav %}
+<a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-house w-5"></i> Dashboard
+</a>
+<a href="{% url 'all_attendance' %}" class="flex items-center gap-3 px-3 py-2 rounded-md bg-teal-800 font-medium">
+    <i class="fa-solid fa-clock w-5"></i> Attendance
+</a>
+{% endblock %}
+
+{% block main_class %}p-4 md:p-8 flex justify-center{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-sm">
+    <h1 class="text-xl font-bold text-gray-900 mb-1">Correct Attendance</h1>
+    <p class="text-gray-500 text-sm mb-6">{{ record.employee.employee_id }} — {{ record.date }}</p>
+
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+        <form method="POST" class="flex flex-col gap-4">
+            {% csrf_token %}
+            <div>
+                <label class="text-sm font-semibold block mb-1">Check-in Time</label>
+                <input type="time" name="check_in_time" value="{{ record.check_in_time|time:'H:i' }}"
+                       class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-800">
+            </div>
+            <div>
+                <label class="text-sm font-semibold block mb-1">Check-out Time</label>
+                <input type="time" name="check_out_time" value="{{ record.check_out_time|time:'H:i' }}"
+                       class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-800">
+            </div>
+            <div>
+                <label class="text-sm font-semibold block mb-1">Status</label>
+                <select name="status" class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-800">
+                    {% for value, label in statuses %}
+                        <option value="{{ value }}" {% if record.status == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="flex gap-3 mt-2">
+                <button type="submit" class="bg-teal-900 hover:bg-teal-800 text-white font-medium px-5 py-2 rounded-md">Save Correction</button>
+                <a href="{% url 'all_attendance' %}" class="border border-gray-300 text-gray-700 font-medium px-5 py-2 rounded-md hover:bg-gray-50">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

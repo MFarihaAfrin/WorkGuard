@@ -1,0 +1,58 @@
+{% extends 'accounts/dashboard_base.html' %}
+{% block title %}Department Budgets - WorkGuard{% endblock %}
+{% block has_sidebar %}{% endblock %}
+{% block toggle_btn %}<button onclick="toggleSidebar()" class="text-gray-700 hover:text-gray-900 text-xl"><i class="fa-solid fa-bars"></i></button>{% endblock %}
+{% block sidebar_nav %}
+<a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-house w-5"></i> Dashboard
+</a>
+<a href="{% url 'employees' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-users w-5"></i> Employees
+</a>
+<a href="{% url 'departments' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-building w-5"></i> Departments
+</a>
+<a href="{% url 'budget_overview' %}" class="flex items-center gap-3 px-3 py-2 rounded-md bg-teal-800 font-medium">
+    <i class="fa-solid fa-sack-dollar w-5"></i> Budgets
+</a>
+<a href="{% url 'all_attendance' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-clock w-5"></i> Attendance
+</a>
+<a href="{% url 'final_approval' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-receipt w-5"></i> Expense Claims
+</a>
+<a href="{% url 'all_leave' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-calendar-days w-5"></i> Leave
+</a>
+<a href="{% url 'reports' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-chart-simple w-5"></i> Reports
+</a>
+{% endblock %}
+{% block main_class %}p-4 md:p-8{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold text-gray-900 mb-6">Department Budgets</h1>
+<div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="text-left text-gray-500 border-b border-gray-100">
+                    <th class="px-6 py-3 font-medium">Department</th>
+                    <th class="px-6 py-3 font-medium">Budget</th>
+                    <th class="px-6 py-3 font-medium">Used</th>
+                    <th class="px-6 py-3 font-medium">Remaining</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dept in departments %}
+                <tr class="border-b border-gray-100">
+                    <td class="px-6 py-3 text-gray-900 font-medium">{{ dept.name }}</td>
+                    <td class="px-6 py-3 text-gray-600">${{ dept.budget }}</td>
+                    <td class="px-6 py-3 text-gray-600">${{ dept.budget_used }}</td>
+                    <td class="px-6 py-3 text-gray-600">${{ dept.remaining }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

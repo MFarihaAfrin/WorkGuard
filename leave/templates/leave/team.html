@@ -1,0 +1,198 @@
+{% extends 'accounts/dashboard_base.html' %}
+
+{% block title %}Team Leave Requests - WorkGuard{% endblock %}
+
+{% block has_sidebar %}{% endblock %}
+
+{% block toggle_btn %}
+<button onclick="toggleSidebar()" class="text-gray-700 hover:text-gray-900 text-xl"><i class="fa-solid fa-bars"></i></button>
+{% endblock %}
+
+{% block sidebar_nav %}
+<a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-house w-5"></i> Dashboard
+</a>
+<a href="{% url 'team_attendance' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-clock w-5"></i> Team Attendance
+</a>
+<a href="{% url 'apply_leave' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-calendar-days w-5"></i> My Leave
+</a>
+<a href="{% url 'team_leave' %}" class="flex items-center gap-3 px-3 py-2 rounded-md bg-teal-800 font-medium">
+    <i class="fa-solid fa-calendar-days w-5"></i> Team Leave
+</a>
+<a href="{% url 'team_claims' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-receipt w-5"></i> Approve Claims
+</a>
+{% endblock %}
+
+{% block main_class %}p-4 md:p-8{% endblock %}
+
+{% block content %}
+
+<div class="mb-6 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+    <!-- Policy Header -->
+    <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100">
+        <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-teal-50 text-teal-700 flex items-center justify-center">
+                <i class="fa-solid fa-calendar-check text-sm"></i>
+            </div>
+
+            <div>
+                <h2 class="text-sm font-semibold text-gray-900">
+                    Leave Policy
+                </h2>
+                <p class="text-xs text-gray-500">
+                    Guidelines for submitting and approving leave requests
+                </p>
+            </div>
+        </div>
+
+        <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-teal-50 text-teal-700 text-xs font-medium">
+            <i class="fa-solid fa-circle-info text-[10px]"></i>
+            Policy
+        </span>
+    </div>
+
+    <!-- Policy Items -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-gray-100">
+
+        <!-- Annual Allowance -->
+        <div class="px-5 py-4 flex items-start gap-3">
+            <div class="mt-0.5 text-teal-600">
+                <i class="fa-solid fa-calendar-days"></i>
+            </div>
+
+            <div>
+                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                    Annual Allowance
+                </p>
+                <p class="mt-1 text-sm text-gray-800">
+                    <span class="font-semibold text-gray-900">20 days</span>
+                    per employee per year
+                </p>
+            </div>
+        </div>
+
+        <!-- Manager Approval -->
+        <div class="px-5 py-4 flex items-start gap-3">
+            <div class="mt-0.5 text-teal-600">
+                <i class="fa-solid fa-user-tie"></i>
+            </div>
+
+            <div>
+                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                    Manager Approval
+                </p>
+                <p class="mt-1 text-sm text-gray-800">
+                    Up to
+                    <span class="font-semibold text-gray-900">3 days</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- HR Approval -->
+        <div class="px-5 py-4 flex items-start gap-3">
+            <div class="mt-0.5 text-teal-600">
+                <i class="fa-solid fa-users-gear"></i>
+            </div>
+            <div>
+                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                    Longer Leave
+                </p>
+                <p class="mt-1 text-sm text-gray-800">
+                    <span class="font-semibold text-gray-900">Contact HR</span> directly
+                </p>
+            </div>
+        </div>
+        <!-- Application Rule -->
+        <div class="px-5 py-4 flex items-start gap-3">
+            <div class="mt-0.5 text-teal-600">
+                <i class="fa-solid fa-clock"></i>
+            </div>
+
+            <div>
+                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                    Application Rule
+                </p>
+                <p class="mt-1 text-sm text-gray-800">
+                    <span class="font-semibold text-gray-900">Future dates only</span>
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Policy Note -->
+    <div class="px-5 py-2.5 bg-gray-50 border-t border-gray-100">
+        <p class="flex items-center gap-2 text-xs text-gray-500">
+            <i class="fa-solid fa-lightbulb text-teal-600"></i>
+            Leave beyond 3 days cannot be requested here — please speak with HR in person.
+        </p>
+    </div>
+</div>
+
+<h1 class="text-2xl font-bold text-gray-900 mb-1">Team Leave Requests</h1>
+<p class="text-gray-500 mb-6">{{ requests.count }} total request{{ requests.count|pluralize }}</p>
+
+<div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="text-left text-gray-500 border-b border-gray-100">
+                    <th class="px-6 py-3 font-medium">Employee</th>
+                    <th class="px-6 py-3 font-medium">Type</th>
+                    <th class="px-6 py-3 font-medium">Dates</th>
+                    <th class="px-6 py-3 font-medium">Days</th>
+                    <th class="px-6 py-3 font-medium">Reason</th>
+                    <th class="px-6 py-3 font-medium">Document</th>
+                    <th class="px-6 py-3 font-medium">Status</th>
+                    <th class="px-6 py-3 font-medium">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in requests %}
+                <tr class="border-b border-gray-100">
+                    <td class="px-6 py-3 text-gray-900 font-medium">{{ req.employee.employee_id }}</td>
+                    <td class="px-6 py-3 text-gray-600">{{ req.get_leave_type_display }}</td>
+                    <td class="px-6 py-3 text-gray-600">{{ req.start_date }} → {{ req.end_date }}</td>
+                    <td class="px-6 py-3 text-gray-600">{{ req.total_days }}</td>
+                    <td class="px-6 py-3 text-gray-600">{{ req.reason }}</td>
+                    <td class="px-6 py-3">
+                        {% if req.document %}
+                            <a href="{{ req.document.url }}" target="_blank" class="text-teal-700 hover:underline text-xs">
+                                <i class="fa-solid fa-file-lines"></i> View
+                            </a>
+                        {% else %}
+                            <span class="text-gray-400 text-xs">—</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-3">
+                        {% if req.status == 'APPROVED' %}
+                            <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">Approved</span>
+                        {% elif req.status == 'REJECTED' %}
+                            <span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full">Rejected</span>
+                        {% else %}
+                            <span class="bg-yellow-100 text-yellow-700 text-xs px-2 py-1 rounded-full">Pending</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-3">
+                        {% if req.status == 'PENDING' %}
+                        <form method="POST" action="{% url 'decide_leave' req.pk %}" class="flex gap-2">
+                            {% csrf_token %}
+                            <button type="submit" name="decision" value="approve" class="text-teal-700 hover:underline text-xs">Approve</button>
+                            <button type="submit" name="decision" value="reject" class="text-red-600 hover:underline text-xs">Reject</button>
+                        </form>
+                        {% else %}
+                            <span class="text-gray-400 text-xs">—</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="7" class="px-6 py-6 text-center text-gray-400">No leave requests yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

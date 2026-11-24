@@ -1,0 +1,93 @@
+{% extends 'accounts/base.html' %}
+{% block title %}Contact - WorkGuard{% endblock %}
+
+{% block content %}
+
+<div class="max-w-md mx-auto px-6 py-16 text-center">
+
+    {% if user.is_authenticated %}
+
+        <!-- ================= LOGGED-IN USERS ================= -->
+
+        {% if user.role == 'HRF' %}
+
+            <!-- HR / Finance -->
+            <p class="text-teal-700 font-semibold uppercase text-sm tracking-wide">
+                Need Technical Help?
+            </p>
+
+            <h1 class="text-3xl font-bold text-gray-800 mt-1 mb-4">
+                Contact WorkGuard Support
+            </h1>
+
+            <p class="text-gray-500 mb-6">
+                For technical issues, system problems, or questions
+                about WorkGuard, please contact the WorkGuard support team.
+            </p>
+
+            <a href="mailto:support@workguard.com"
+               class="inline-flex items-center gap-2 bg-teal-800 hover:bg-teal-700 text-white font-medium px-6 py-3 rounded-full">
+
+                <i class="fa-solid fa-envelope"></i>
+                support@workguard.com
+
+            </a>
+
+        {% else %}
+
+            <!-- Employee / Manager -->
+            <p class="text-teal-700 font-semibold uppercase text-sm tracking-wide">
+                Need Help?
+            </p>
+
+            <h1 class="text-3xl font-bold text-gray-800 mt-1 mb-4">
+                Contact HR
+            </h1>
+
+            <p class="text-gray-500 mb-6">
+                For questions about attendance, leave, expenses,
+                approvals, or your account, please contact your
+                HR department directly.
+            </p>
+
+            <a href="mailto:hr@touchandsolve.com"
+               class="inline-flex items-center gap-2 bg-teal-800 hover:bg-teal-700 text-white font-medium px-6 py-3 rounded-full">
+
+                <i class="fa-solid fa-envelope"></i>
+                hr@touchandsolve.com
+
+            </a>
+
+        {% endif %}
+
+    {% else %}
+
+        <!-- ================= BEFORE LOGIN ================= -->
+
+        <p class="text-teal-700 font-semibold uppercase text-sm tracking-wide">
+            Need Help?
+        </p>
+
+        <h1 class="text-3xl font-bold text-gray-800 mt-1 mb-4">
+            Contact Support
+        </h1>
+
+        <p class="text-gray-500 mb-6">
+            Having trouble logging in? Please contact your HR department
+            for account or registration issues. For questions about
+            WorkGuard as a platform, contact the WorkGuard support team.
+        </p>
+
+        <a href="mailto:support@workguard.com"
+           class="inline-flex items-center gap-2 bg-teal-800 hover:bg-teal-700 text-white font-medium px-6 py-3 rounded-full">
+
+            <i class="fa-solid fa-envelope"></i>
+            support@workguard.com
+
+        </a>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

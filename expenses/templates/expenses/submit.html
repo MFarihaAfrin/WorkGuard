@@ -1,0 +1,113 @@
+{% extends 'accounts/dashboard_base.html' %}
+{% block title %}Submit Expense Claim - WorkGuard{% endblock %}
+{% block has_sidebar %}{% endblock %}
+{% block toggle_btn %}<button onclick="toggleSidebar()" class="text-gray-700 hover:text-gray-900 text-xl"><i class="fa-solid fa-bars"></i></button>{% endblock %}
+
+{% block sidebar_nav %}
+<a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-house w-5"></i> Dashboard
+</a>
+<a href="{% url 'mark_attendance' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-clock w-5"></i> Attendance
+</a>
+<a href="{% url 'attendance_history' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-clock-rotate-left w-5"></i> Attendance History
+</a>
+<a href="{% url 'submit_claim' %}" class="flex items-center gap-3 px-3 py-2 rounded-md bg-teal-800 font-medium">
+    <i class="fa-solid fa-receipt w-5"></i> Expense Claims
+</a>
+<a href="{% url 'my_claims' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-file-lines w-5"></i> My Claims
+</a>
+<a href="{% url 'apply_leave' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-calendar-days w-5"></i> Leave
+</a>
+<a href="{% url 'leave_history' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-calendar-check w-5"></i> Leave History
+</a>
+{% endblock %}
+
+{% block main_class %}p-4 md:p-8 flex justify-center{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-md">
+    <div class="text-center mb-6">
+        <div class="w-14 h-14 bg-teal-100 text-teal-700 rounded-full flex items-center justify-center mx-auto mb-3 text-xl">
+            <i class="fa-solid fa-receipt"></i>
+        </div>
+        <h1 class="text-2xl font-bold text-gray-900">Submit Expense Claim</h1>
+    </div>
+
+    <!-- Policy Box -->
+    <div class="mb-6 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+        <div class="flex items-center gap-2.5 px-5 py-3.5 border-b border-gray-100">
+            <div class="w-8 h-8 rounded-lg bg-teal-50 text-teal-700 flex items-center justify-center">
+                <i class="fa-solid fa-file-invoice-dollar text-sm"></i>
+            </div>
+            <div>
+                <h2 class="text-sm font-semibold text-gray-900">Expense Policy</h2>
+                <p class="text-xs text-gray-500">Please review before submitting</p>
+            </div>
+        </div>
+        <div class="px-5 py-4 text-sm text-gray-700 space-y-1.5">
+            <p><i class="fa-solid fa-check text-teal-600 mr-1.5"></i> Travel: up to ${{ limits.TRAVEL }}</p>
+            <p><i class="fa-solid fa-check text-teal-600 mr-1.5"></i> Overtime Meal: up to ${{ limits.MEALS }}</p>
+            <p><i class="fa-solid fa-check text-teal-600 mr-1.5"></i> Office Supplies: up to ${{ limits.SUPPLIES }}</p>
+            <p><i class="fa-solid fa-check text-teal-600 mr-1.5"></i> Client Meeting: up to ${{ limits.CLIENT }}</p>
+        </div>
+        <div class="px-5 py-2.5 bg-gray-50 border-t border-gray-100">
+            <p class="flex items-center gap-2 text-xs text-gray-500">
+                <i class="fa-solid fa-lightbulb text-teal-600"></i>
+                Claims must be within 30 days of the expense and include a receipt.
+            </p>
+        </div>
+    </div>
+
+    {% if error %}
+        <p class="bg-red-100 text-red-700 text-sm p-3 rounded-lg mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+        </p>
+    {% endif %}
+
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+        <form method="POST" enctype="multipart/form-data" class="flex flex-col gap-4">
+            {% csrf_token %}
+            <div>
+                <label class="text-sm font-semibold block mb-1">Category</label>
+                <select name="category" required class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-800">
+                    <option value="TRAVEL">Travel</option>
+                    <option value="MEALS">Overtime Meal</option>
+                    <option value="SUPPLIES">Office Supplies</option>
+                    <option value="CLIENT">Client Meeting</option>
+                    <option value="OTHERS">Others</option>
+                </select>
+            </div>
+        
+            <div>
+                <label class="text-sm font-semibold block mb-1">Description</label>
+                <input type="text" name="description" required class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-800">
+            </div>
+            <div>
+                <label class="text-sm font-semibold block mb-1">Receipt Photo</label>
+                <input type="file" name="receipt" accept="image/*" required class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm">
+            </div>
+            <button type="submit" class="w-full bg-teal-800 hover:bg-teal-700 text-white font-medium py-2.5 rounded-lg">
+                Continue <i class="fa-solid fa-arrow-right ml-1"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const expenseDate = document.getElementById("expense_date");
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    const today = `${year}-${month}-${day}`;
+    expenseDate.max = today;
+});
+</script>
+
+{% endblock %} 

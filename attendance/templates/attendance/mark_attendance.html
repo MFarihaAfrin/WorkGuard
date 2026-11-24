@@ -1,0 +1,109 @@
+{% extends 'accounts/dashboard_base.html' %}
+
+{% block title %}Mark Attendance - WorkGuard{% endblock %}
+{% block has_sidebar %}{% endblock %}
+
+{% block toggle_btn %}
+<button onclick="toggleSidebar()" class="text-gray-700 hover:text-gray-900 text-xl"><i class="fa-solid fa-bars"></i></button>
+{% endblock %}
+
+{% block sidebar_nav %}
+<a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-house w-5"></i> Dashboard
+</a>
+<a href="{% url 'mark_attendance' %}" class="flex items-center gap-3 px-3 py-2 rounded-md bg-teal-800 font-medium">
+    <i class="fa-solid fa-clock w-5"></i> Attendance
+</a>
+<a href="{% url 'attendance_history' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-clock-rotate-left w-5"></i> Attendance History
+</a>
+<a href="{% url 'submit_claim' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-receipt w-5"></i> Expense Claims
+</a>
+<a href="{% url 'my_claims' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-file-lines w-5"></i> My Claims
+</a>
+<a href="{% url 'apply_leave' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-calendar-days w-5"></i> Leave
+</a>
+<a href="{% url 'leave_history' %}" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-teal-800">
+    <i class="fa-solid fa-calendar-check w-5"></i> Leave History
+</a>
+{% endblock %}
+
+{% block main_class %}flex items-start md:items-center justify-center p-4 md:p-8{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-sm">
+
+    <div class="text-center mb-6">
+        <div class="w-14 h-14 bg-teal-100 text-teal-700 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+            <i class="fa-solid fa-clock"></i>
+        </div>
+        <h1 class="text-2xl font-bold text-gray-900">Mark Attendance</h1>
+        <p class="text-gray-500 text-sm">{{ record.date|date:"l, M d, Y" }}</p>
+    </div>
+
+    {% if error %}
+        <p class="bg-red-100 text-red-700 text-sm p-3 rounded-lg mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+        </p>
+    {% endif %}
+
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+
+        <!-- STATUS BADGE -->
+        <div class="flex justify-center mb-6">
+            {% if record.status == 'PRESENT' %}
+                <span class="bg-green-100 text-green-700 text-sm font-medium px-4 py-1.5 rounded-full">Present</span>
+            {% elif record.status == 'LATE' %}
+                <span class="bg-yellow-100 text-yellow-700 text-sm font-medium px-4 py-1.5 rounded-full">Late</span>
+            {% elif record.status == 'OVERTIME' %}
+                <span class="bg-blue-100 text-blue-700 text-sm font-medium px-4 py-1.5 rounded-full">Overtime</span>
+            {% elif record.status == 'EARLY_LEAVE' %}
+                <span class="bg-orange-100 text-orange-700 text-sm font-medium px-4 py-1.5 rounded-full">Early Leave</span>
+            {% else %}
+                <span class="bg-gray-100 text-gray-500 text-sm font-medium px-4 py-1.5 rounded-full">Absent</span>
+            {% endif %}
+        </div>
+
+        <!-- TIMES -->
+        <div class="flex justify-between text-center mb-6">
+            <div class="flex-1">
+                <p class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> Check-in</p>
+                <p class="font-semibold text-gray-900">
+                    {% if record.check_in_time %}{{ record.check_in_time }}{% else %}—{% endif %}
+                </p>
+            </div>
+            <div class="w-px bg-gray-100"></div>
+            <div class="flex-1">
+                <p class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Check-out</p>
+                <p class="font-semibold text-gray-900">
+                    {% if record.check_out_time %}{{ record.check_out_time }}{% else %}—{% endif %}
+                </p>
+            </div>
+        </div>
+
+        <!-- ACTION -->
+        <form method="POST">
+            {% csrf_token %}
+            {% if not record.check_in_time %}
+                <button type="submit" name="action" value="check_in"
+                        class="w-full bg-teal-900 hover:bg-teal-800 text-white font-medium py-3 rounded-xl transition">
+                    <i class="fa-solid fa-arrow-right-to-bracket mr-2"></i> Check In
+                </button>
+            {% elif not record.check_out_time %}
+                <button type="submit" name="action" value="check_out"
+                        class="w-full bg-teal-900 hover:bg-teal-800 text-white font-medium py-3 rounded-xl transition">
+                    <i class="fa-solid fa-arrow-right-from-bracket mr-2"></i> Check Out
+                </button>
+            {% else %}
+                <p class="text-center text-sm text-gray-400">
+                    <i class="fa-solid fa-circle-check text-green-500 mr-1"></i> Attendance completed for today
+                </p>
+            {% endif %}
+        </form>
+
+    </div>
+</div>
+{% endblock %}
